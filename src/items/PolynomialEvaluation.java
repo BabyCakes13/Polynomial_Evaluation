@@ -70,6 +70,7 @@ public class PolynomialEvaluation {
 	public void parseCells() {
 		currentOutputs = new ArrayList<Integer>();
 		currentXes = new ArrayList<Integer>();
+		
 		for(int i = 0 ; i < cells.size(); ++i) {
 			Cell cell = cells.get(i);
 			
@@ -79,10 +80,17 @@ public class PolynomialEvaluation {
 			int output = cell.computeCoefficient(input, x); // calculate the new output based on the cell data
 			currentOutputs.add(output);
 			currentXes.add(x);
+			
+			// TODO send data here to the GUI
 		}
 		
 		this.previousTimeOutputs = currentOutputs;
 		this.previousTimeXes = currentXes;
+	}
+	
+	public Object[] sendData(int time, int input, int output, int x) {
+		Object[] dataLine = {time, input, output, x};
+		return dataLine;
 	}
 	
 	private void displayParsing(ArrayList<Integer> al) {
