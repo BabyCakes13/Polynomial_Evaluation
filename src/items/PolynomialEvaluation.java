@@ -11,6 +11,7 @@ public class PolynomialEvaluation {
 	private ArrayList<Integer> previousTimeXes = new ArrayList<Integer>();
 	private ArrayList<Integer> currentOutputs = new ArrayList<Integer>();
 	private ArrayList<Integer> currentXes = new ArrayList<Integer>();
+	
 	private int runtime;
 	
 	public PolynomialEvaluation() {
@@ -35,10 +36,6 @@ public class PolynomialEvaluation {
 	public void startProcessing() {
 		for(int time = 0; time < this.runtime; time++) {
 			this.feedData(time);
-			
-			// set up new cells for the current time phase
-			ArrayList<Integer> currentOutputs = new ArrayList<Integer>();
-			ArrayList<Integer> currentXes = new ArrayList<Integer>();
 			
 			System.out.print ("Cell Inputs:  ");
 			this.displayParsing(this.previousTimeOutputs);
