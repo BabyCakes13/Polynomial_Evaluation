@@ -37,6 +37,7 @@ public class PolynomialEvaluation {
 			this.parseCells(currentOutputs, currentXes); // parse and update outputs and x'es through cells
 			
 			this.displayParsing();
+			System.out.println("");
 		}
 	}
 	
