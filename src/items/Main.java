@@ -11,8 +11,8 @@ public class Main {
 	public static void main(String[] args) {
 		PolynomialEvaluation pe = new PolynomialEvaluation();
 		pe.startProcessing();
-		// ArrayList<Cell> cells = pe.getCells();
-		// callGUI(cells);
+		ArrayList<Cell> cells = pe.getCells();
+		callGUI(cells);
 	}
 	
 	public static void callEvaluation() {
