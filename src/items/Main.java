@@ -10,18 +10,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		PolynomialEvaluation pe = new PolynomialEvaluation();
-		pe.startProcessing();
-		ArrayList<Cell> cells = pe.getCells();
-		callGUI(cells);
-	}
-	
-	public static void callEvaluation() {
-		PolynomialEvaluation pe = new PolynomialEvaluation();
-		pe.startProcessing();
-	}
-	
-	public static void callGUI(ArrayList<Cell> cells) {
-		Window w = new Window(cells);
+		// pe.startProcessing();
+		Window w = new Window(pe);
 	}
 
 }
