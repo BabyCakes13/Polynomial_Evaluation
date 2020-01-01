@@ -38,7 +38,7 @@ public class Window {
 		frame.add(cellContainer);
 		frame.add(parsingContainer);
 
-		frame.setSize(500, 500);
+		frame.setSize(1000, 1000);
 		frame.setVisible(true);
 
 	}
@@ -62,9 +62,12 @@ public class Window {
 		container.setBorder(BorderFactory.createTitledBorder("Control"));
 		
 		GridBagLayout gridbag = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
+		GridBagConstraints constraint1 = new GridBagConstraints();
+		GridBagConstraints constraint2 = new GridBagConstraints();
+
 		container.setLayout(gridbag);
-		c.fill = GridBagConstraints.BOTH;
+		constraint1.fill = GridBagConstraints.BOTH;
+		constraint2.fill = GridBagConstraints.BOTH;
 		
 		JButton pushXButton = new JButton("PUSH X");
 		JButton flushButton = new JButton("FLUSH");
@@ -76,14 +79,11 @@ public class Window {
 		JTextField pushXTextField = new JTextField();
 		pushXTextField.setBounds(110, 50, 130, 30);
 		
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		gridbag.setConstraints(pushXLabel, c);
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		gridbag.setConstraints(pushXTextField, c);
-		gridbag.setConstraints(pushXButton, c);
-		gridbag.setConstraints(flushButton, c);
+		gridbag.setConstraints(pushXLabel, constraint1);
+		gridbag.setConstraints(pushXButton, constraint1);
+		gridbag.setConstraints(flushButton, constraint1);
+		constraint2.weightx = 0.5;
+		gridbag.setConstraints(pushXTextField, constraint2);
 		
 		container.add(pushXLabel);
 		container.add(pushXTextField);
