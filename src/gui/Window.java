@@ -11,32 +11,32 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import items.Cell;
 
 public class Window {
 	private ArrayList<Cell> cells;
 
-	private ArrayList<JButton> buttons;
-
 	public Window(ArrayList<Cell> cells) {
 		this.cells = cells;
-		this.buttons = new ArrayList<JButton>();
-
 		this.setUp();
 	}
 
 	public void setUp() {
 		JFrame frame = this.setFrame();
 
-		Container panel1 = this.createCellsContainer();
-		Container panel2 = this.createParsingContainer();
+		Container controlContainer = this.createControlContainer();
+		Container cellContainer = this.createCellsContainer();
+		Container parsingContainer = this.createParsingContainer();
 
-		frame.add(panel1);
-		frame.add(panel2);
+		frame.add(controlContainer);
+		frame.add(cellContainer);
+		frame.add(parsingContainer);
 
 		frame.setSize(500, 500);
 		frame.setVisible(true);
@@ -46,7 +46,7 @@ public class Window {
 	public JFrame setFrame() {
 		JFrame frame = new JFrame("Polynomial Evaluation");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new GridLayout(3, 1));
+		frame.setLayout(new GridLayout(4, 1));
 
 		return frame;
 	}
@@ -56,6 +56,43 @@ public class Window {
 		gridbag.setConstraints(button, c);
 		container.add(button);
 	}
+	
+	public Container createControlContainer() {
+		JPanel container = new JPanel();
+		container.setBorder(BorderFactory.createTitledBorder("Control"));
+		
+		GridBagLayout gridbag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		container.setLayout(gridbag);
+		c.fill = GridBagConstraints.BOTH;
+		
+		JButton pushXButton = new JButton("PUSH X");
+		JButton flushButton = new JButton("FLUSH");
+		
+		JLabel pushXLabel = new JLabel();
+		pushXLabel.setText("Enter the value of the X to be pushed to the flow:");
+		pushXLabel.setBounds(10, 10, 100, 100);
+		
+		JTextField pushXTextField = new JTextField();
+		pushXTextField.setBounds(110, 50, 130, 30);
+		
+		c.weightx = 0.5;
+		c.weighty = 0.5;
+		gridbag.setConstraints(pushXLabel, c);
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		gridbag.setConstraints(pushXTextField, c);
+		gridbag.setConstraints(pushXButton, c);
+		gridbag.setConstraints(flushButton, c);
+		
+		container.add(pushXLabel);
+		container.add(pushXTextField);
+		container.add(pushXButton);
+		container.add(flushButton);
+		
+		return container;
+	}
+	
 
 	public Container createCellsContainer() {
 		JPanel container = new JPanel();
