@@ -12,7 +12,10 @@ public class PolynomialEvaluation {
 	private ArrayList<Integer> currentOutputs = new ArrayList<Integer>();
 	private ArrayList<Integer> currentXes = new ArrayList<Integer>();
 	
+	private int FLUSH_VALUE = 99999;
+	
 	private int runtime;
+	private int runtimeLeftGUI;
 	
 	public PolynomialEvaluation() {
 		this.setItemsUp();
@@ -31,6 +34,38 @@ public class PolynomialEvaluation {
 			this.previousTimeXes.add(0);
 			this.cells.add(cell);
 		}
+	}
+	
+	public void startProcessingWithGUI(int x) {
+		if (this.runtimeLeftGUI > this.runtime) {
+			return;
+		} else {
+			this.feedDataGUI(x);
+			
+			System.out.print ("Cell Inputs:  ");
+			this.displayParsing(this.previousTimeOutputs);
+			
+			this.parseCells(); // parse and update outputs and x'es through cells
+			
+			System.out.print ("Cell Outputs: ");
+			this.displayParsing(this.previousTimeOutputs);
+			System.out.println("");
+		}
+		
+	}
+	
+	public void feedDataGUI(int x) {
+		if(x != this.FLUSH_VALUE) {
+			  this.previousTimeXes.add(0, x); 
+		} else {
+			this.previousTimeXes.add(0, this.FLUSH_VALUE);
+		}
+		
+		this.previousTimeOutputs.add(0, 0);
+		
+		// get the results:
+		System.out.print("Result is " + this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1));
+		System.out.println(" for x " + this.previousTimeXes.get(this.previousTimeXes.size() -1));
 	}
 	
 	public void startProcessing() {
