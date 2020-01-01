@@ -71,6 +71,7 @@ public class Window {
         
 	    c.fill = GridBagConstraints.BOTH;
 	    c.weightx = 1.0;
+	    c.weighty = 1.0;
 	    
 	    for(Cell cell: this.cells) {
 			this.makebutton(Integer.toString(cell.getCoefficient()), gridbag, c, container);
