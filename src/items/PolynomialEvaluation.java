@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PolynomialEvaluation {
-	private ArrayList<Integer> coefficients = new ArrayList<Integer>(Arrays.asList(2, -6, 2, -1));
+	private ArrayList<Float> coefficients = new ArrayList<Float>(Arrays.asList(2f, -6f, 2f, -1f));
 	private ArrayList<Cell> cells = new ArrayList<Cell>();
-	private ArrayList<Integer> previousTimeOutputs = new ArrayList<Integer>();
-	private ArrayList<Integer> previousTimeXes = new ArrayList<Integer>();
-	private ArrayList<Integer> currentOutputs = new ArrayList<Integer>();
-	private ArrayList<Integer> currentXes = new ArrayList<Integer>();
+	private ArrayList<Float> previousTimeOutputs = new ArrayList<Float>();
+	private ArrayList<Float> previousTimeXes = new ArrayList<Float>();
+	private ArrayList<Float> currentOutputs = new ArrayList<Float>();
+	private ArrayList<Float> currentXes = new ArrayList<Float>();
 	
-	private int FLUSH_VALUE = 99999;
+	private float result;
+	private float x;
+	
+	private float FLUSH_VALUE = Float.NaN;
 	
 	private int runtime;
 	private int time;
@@ -25,40 +28,31 @@ public class PolynomialEvaluation {
 		return this.cells;
 	}
 	
+	public ArrayList<Float> getPreviousTimeOutputs() {
+		return this.previousTimeOutputs;
+	}
+	
+	public ArrayList<Float> getCurrentOutputs() {
+		return this.currentOutputs;
+	}
+	
 	private void setItemsUp() {
-		for(int coefficient : this.coefficients) {
+		for(float coefficient : this.coefficients) {
 			// create the cells, previous time outputs and previous time x'es
 			Cell cell = new Cell(coefficient);
-			this.previousTimeOutputs.add(0);
-			this.previousTimeXes.add(0);
+			this.previousTimeOutputs.add(FLUSH_VALUE);
+			this.previousTimeXes.add(FLUSH_VALUE);
 			this.cells.add(cell);
 		}
 	}
 	
-	public void handleFlush() {
-		while(this.time <= this.runtime) {
-			this.feedData(FLUSH_VALUE);
-			
-			System.out.print ("Cell Inputs:  ");
-			this.displayParsing(this.previousTimeOutputs);
-			
-			this.parseCells(); // parse and update outputs and x'es through cells
-			
-			System.out.print ("Cell Outputs: ");
-			this.displayParsing(this.previousTimeOutputs);
-			System.out.println("");
-			
-			this.time++;
+	public boolean handlePushX(float x, boolean flush) {
+		if (!flush) {
+			this.runtime++;
 		}
-	}
-	
-	public void handlePushX(int x) {
-		this.runtime =  coefficients.size() + 1;
 		if (this.time > this.runtime) {
-			return;
-		} else {
-			this.feedData(x);
-			
+			return false;
+		} else {			
 			System.out.print ("Cell Inputs:  ");
 			this.displayParsing(this.previousTimeOutputs);
 			
@@ -68,36 +62,45 @@ public class PolynomialEvaluation {
 			this.displayParsing(this.previousTimeOutputs);
 			System.out.println("");
 			
+			this.propagate(x);
 			this.time++;
+			System.out.println("------------------------------------------------------------------------------------");
+			return true;
 		}
 		
 	}
 	
-	public void feedData(int x) {
-		if(x != this.FLUSH_VALUE) {
-			  this.previousTimeXes.add(0, x); 
-		} else {
-			this.previousTimeXes.add(0, this.FLUSH_VALUE);
-		}
-		
-		this.previousTimeOutputs.add(0, 0);
+	public float getPropagatedResult() {
+		return this.result;
+	}
+	
+	public float getPropagatedX() {
+		return this.x;
+	}
+	
+	public void propagate(float x) {
+		this.previousTimeXes.add(0, x); 
+		this.previousTimeOutputs.add(0, 0f); // add 0*x for the first ax + b
 		
 		// get the results:
 		System.out.print("Result is " + this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1));
 		System.out.println(" for x " + this.previousTimeXes.get(this.previousTimeXes.size() -1));
+		
+		this.result = this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1);
+		this.x = this.previousTimeXes.get(this.previousTimeXes.size() -1);
 	}
 	
 	public void parseCells() {
-		currentOutputs = new ArrayList<Integer>();
-		currentXes = new ArrayList<Integer>();
+		currentOutputs = new ArrayList<Float>();
+		currentXes = new ArrayList<Float>();
 		
 		for(int i = 0 ; i < cells.size(); ++i) {
 			Cell cell = cells.get(i);
 			
-			int input = previousTimeOutputs.get(i); // get the input from the last output
-			int x = previousTimeXes.get(i); // get the x from the previous x
+			float input = previousTimeOutputs.get(i); // get the input from the last output
+			float x = previousTimeXes.get(i); // get the x from the previous x
 			
-			int output = cell.computeCoefficient(input, x); // calculate the new output based on the cell data
+			float output = cell.computeCoefficient(input, x); // calculate the new output based on the cell data
 			currentOutputs.add(output);
 			currentXes.add(x);
 			
@@ -108,14 +111,14 @@ public class PolynomialEvaluation {
 		this.previousTimeXes = currentXes;
 	}
 	
-	public Object[] sendData(int time, int input, int output, int x) {
+	public Object[] sendData(int time, float input, float output, float x) {
 		Object[] dataLine = {time, input, output, x};
 		return dataLine;
 	}
 	
-	private void displayParsing(ArrayList<Integer> al) {
+	private void displayParsing(ArrayList<Float> al) {
 		System.out.println("");
-		for(Integer output: al) {
+		for(Float output: al) {
 			System.out.print(output + ", ");
 		}
 		System.out.println("");

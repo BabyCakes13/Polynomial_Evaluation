@@ -27,11 +27,13 @@ public class Window {
 	
 	public Window(PolynomialEvaluation polyEval) {
 		this.polyEval = polyEval;
-		this.setUp();
+		this.setUpFrame();
 	}
 
-	public void setUp() {
-		JFrame frame = this.setFrame();
+	public void setUpFrame() {
+		JFrame frame = new JFrame("Polynomial Evaluation");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new GridLayout(4, 1));
 
 		Container controlContainer = this.createControlContainer();
 		Container cellContainer = this.createCellsContainer();
@@ -44,14 +46,6 @@ public class Window {
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
 
-	}
-
-	public JFrame setFrame() {
-		JFrame frame = new JFrame("Polynomial Evaluation");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new GridLayout(4, 1));
-
-		return frame;
 	}
 
 	protected void makebutton(String name, GridBagLayout gridbag, GridBagConstraints c, JPanel container) {
@@ -118,12 +112,30 @@ public class Window {
 			System.out.println("Please enter a number for x.");
 			return;
 		}
+		
+		callForNewX(x, false);
+	}
+
+	private boolean callForNewX(int x, boolean flush) {
+		boolean b;
 		// System.out.println(x);
-		this.polyEval.handlePushX(x);
+		ArrayList<Float> inputs = this.polyEval.getPreviousTimeOutputs();
+		b = this.polyEval.handlePushX(x, flush);
+		ArrayList<Float> outputs = this.polyEval.getPreviousTimeOutputs();
+		System.out.println("Result: " + this.polyEval.getPropagatedResult() + " for x: " + this.polyEval.getPropagatedX());
+		
+		System.out.println("Inputs: " + inputs);
+		System.out.println("Outputs: " + outputs);
+		
+		return b;
 	}
 	
 	private void handleFlush() {
-		this.polyEval.handleFlush();
+		boolean stillRequiresFlush = true;
+		
+		while (stillRequiresFlush) {
+			stillRequiresFlush = callForNewX(0, true);
+		}
 	}
 	
 	public Container createCellsContainer() {
@@ -141,7 +153,7 @@ public class Window {
 		c.weighty = 1.0;
 
 		for (Cell cell : this.polyEval.getCells()) {
-			this.makebutton(Integer.toString(cell.getCoefficient()), gridbag, c, container);
+			this.makebutton(Float.toString(cell.getCoefficient()), gridbag, c, container);
 		}
 
 		return container;
@@ -166,8 +178,8 @@ public class Window {
 		// create the head of the table representing each cell
 		String[] cells = new String[this.polyEval.getCells().size()];
 		for(int i = 0; i < cells.length; i++) {
-			int cellCoefficient = this.polyEval.getCells().get(i).getCoefficient();
-			cells[i] = Integer.toString(cellCoefficient);
+			float cellCoefficient = this.polyEval.getCells().get(i).getCoefficient();
+			cells[i] = Float.toString(cellCoefficient);
 			// System.out.println(i + " " + cells[i]);
 		}
 

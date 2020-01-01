@@ -1,18 +1,18 @@
 package items;
 
 public class Cell {
-	private int coefficient;
+	private float coefficient;
 	
-	public Cell(int coefficient) {
+	public Cell(float coefficient) {
 		this.coefficient = coefficient;
 	}
 	
-	public int getCoefficient() {
+	public float getCoefficient() {
 		return this.coefficient;
 	}
 	
-	public int computeCoefficient(int input, int x) {
-		int output = input * x + this.coefficient;
+	public float computeCoefficient(float input, float x) {
+		float output = input * x + this.coefficient;
 		System.out.println(input + "*" + x + " + " + this.coefficient + " = " + output);
 		return output;
 	}
