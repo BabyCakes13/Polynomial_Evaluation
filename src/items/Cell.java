@@ -7,6 +7,10 @@ public class Cell {
 		this.coefficient = coefficient;
 	}
 	
+	public int getCoefficient() {
+		return this.coefficient;
+	}
+	
 	public int computeCoefficient(int input, int x) {
 		int output = input * x + this.coefficient;
 		System.out.println(input + "*" + x + " + " + this.coefficient + " = " + output);
