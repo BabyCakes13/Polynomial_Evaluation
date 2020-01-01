@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,12 +19,13 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import items.Cell;
+import items.PolynomialEvaluation;
 
 public class Window {
-	private ArrayList<Cell> cells;
-
-	public Window(ArrayList<Cell> cells) {
-		this.cells = cells;
+	private PolynomialEvaluation polyEval;
+	
+	public Window(PolynomialEvaluation polyEval) {
+		this.polyEval = polyEval;
 		this.setUp();
 	}
 
@@ -84,8 +84,7 @@ public class Window {
 		pushXButton.addActionListener(new ActionListener(){
 			   public void actionPerformed(ActionEvent ae){
 			      String textFieldValue = pushXTextField.getText();
-			      // .... do some operation on value ...
-			      System.out.println(textFieldValue);
+			      triggerPressX(textFieldValue);
 			   }
 			});
 		
@@ -103,6 +102,21 @@ public class Window {
 		return container;
 	}
 	
+	private boolean triggerPressX(String textFieldValue) {
+		int x = 0;
+		try {
+			x = Integer.parseInt(textFieldValue);
+		} catch (NumberFormatException e) {
+			 // e.printStackTrace();
+			System.out.println("Please enter a number for x.");
+			return false;
+		}
+		System.out.println(x);
+		// TODO call polyEval function here
+		this.polyEval.startProcessingWithGUI(x);
+		return true;
+	}
+	
 	public Container createCellsContainer() {
 		JPanel container = new JPanel();
 		container.setBorder(BorderFactory.createTitledBorder("Cells"));
@@ -117,7 +131,7 @@ public class Window {
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 
-		for (Cell cell : this.cells) {
+		for (Cell cell : this.polyEval.getCells()) {
 			this.makebutton(Integer.toString(cell.getCoefficient()), gridbag, c, container);
 		}
 
