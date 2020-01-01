@@ -1,15 +1,15 @@
 package gui;
 
-import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
-import java.awt.Insets;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import items.Cell;
 
@@ -26,40 +26,39 @@ public class Window {
 	}
 	
 	public void setUp() {
-		// Create and set up a frame window
-        JFrame.setDefaultLookAndFeelDecorated(true);
-        JFrame frame = new JFrame("BoxLayout Example X_AXIS");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // Set the panel to add buttons
-        JPanel panel = new JPanel();
-        
-     // Set the BoxLayout to be X_AXIS: from left to right
-        BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.X_AXIS);
-        panel.setLayout(boxlayout);
-        
-     // Set border for the panel
-     panel.setBorder(new EmptyBorder(new Insets(150, 200, 150, 200)));
-     //panel.setBorder(new EmptyBorder(new Insets(50, 80, 50, 80))); 
-     
-  // Define new buttons
-     this.addButtons(panel);
-     
-  // Set size for the frame
-     //frame.setSize(300, 300);
-      
-     // Set the window to be visible as the default to be false
-     frame.add(panel);
-     frame.pack();
-     frame.setVisible(true);
+		 	JFrame frame = new JFrame("Alignment Example");
+		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		    Container panel1 = layoutComponents("Top", Component.TOP_ALIGNMENT);
+		    Container panel2 = layoutComponents("Center", Component.CENTER_ALIGNMENT);
+		    Container panel3 = layoutComponents("Bottom", Component.BOTTOM_ALIGNMENT);
+
+		    frame.setLayout(new GridLayout(3, 1));
+		    frame.add(panel1);
+		    frame.add(panel2);
+		    frame.add(panel3);
+
+		    frame.setSize(500, 500);
+		    frame.setVisible(true);
 	}
 	
-	public void addButtons(JPanel panel) {
+	public void addButtons(JPanel container, float alignment) {
 		for(Cell cell: this.cells) {
-			System.out.println(Integer.toString(cell.getCoefficient()));
 			JButton newButton = new JButton(Integer.toString(cell.getCoefficient()));
-			panel.add(newButton);
+			container.add(newButton);
+			newButton.setAlignmentY(alignment);
 			buttons.add(newButton);
 		}
 	}
+	
+	private Container layoutComponents(String title, float alignment) {
+	    JPanel container = new JPanel();
+	    container.setBorder(BorderFactory.createTitledBorder(title));
+	    BoxLayout layout = new BoxLayout(container, BoxLayout.X_AXIS);
+	    container.setLayout(layout);
+	    
+	    this.addButtons(container, alignment);
+	    
+	    return container;
+	  }
 }
