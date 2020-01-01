@@ -9,6 +9,8 @@ public class PolynomialEvaluation {
 	private ArrayList<Cell> cells = new ArrayList<Cell>();
 	private ArrayList<Integer> previousTimeOutputs = new ArrayList<Integer>();
 	private ArrayList<Integer> previousTimeXes = new ArrayList<Integer>();
+	private ArrayList<Integer> currentOutputs = new ArrayList<Integer>();
+	private ArrayList<Integer> currentXes = new ArrayList<Integer>();
 	private int runtime;
 	
 	public PolynomialEvaluation() {
@@ -41,7 +43,7 @@ public class PolynomialEvaluation {
 			System.out.print ("Cell Inputs:  ");
 			this.displayParsing(this.previousTimeOutputs);
 			
-			this.parseCells(currentOutputs, currentXes); // parse and update outputs and x'es through cells
+			this.parseCells(); // parse and update outputs and x'es through cells
 			
 			System.out.print ("Cell Outputs: ");
 			this.displayParsing(this.previousTimeOutputs);
@@ -65,7 +67,9 @@ public class PolynomialEvaluation {
 		System.out.println(" for x " + this.previousTimeXes.get(this.previousTimeXes.size() -1));
 	}
 	
-	private void parseCells(ArrayList<Integer> currentOutputs, ArrayList<Integer> currentXes) {
+	public void parseCells() {
+		currentOutputs = new ArrayList<Integer>();
+		currentXes = new ArrayList<Integer>();
 		for(int i = 0 ; i < cells.size(); ++i) {
 			Cell cell = cells.get(i);
 			
