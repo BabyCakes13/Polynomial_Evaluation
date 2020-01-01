@@ -1,7 +1,10 @@
 package gui;
 
+import java.awt.Button;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -29,7 +32,7 @@ public class Window {
 		 	JFrame frame = new JFrame("Alignment Example");
 		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		    Container panel1 = layoutComponents("Top", Component.TOP_ALIGNMENT);
+		    Container panel1 = this.createCells();
 		    Container panel2 = layoutComponents("Center", Component.CENTER_ALIGNMENT);
 		    Container panel3 = layoutComponents("Bottom", Component.BOTTOM_ALIGNMENT);
 
@@ -51,12 +54,39 @@ public class Window {
 		}
 	}
 	
+	protected void makebutton(String name, GridBagLayout gridbag, GridBagConstraints c, JPanel container) {
+		Button button = new Button(name);
+		gridbag.setConstraints(button, c);
+		container.add(button);
+}
+	
+	public Container createCells() {
+		JPanel container = new JPanel();
+	    container.setBorder(BorderFactory.createTitledBorder("Cells"));
+	    
+	    // start creating the grid
+		GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints c = new GridBagConstraints();
+	    container.setLayout(gridbag);
+        
+	    c.fill = GridBagConstraints.BOTH;
+	    c.weightx = 1.0;
+	    
+	    for(Cell cell: this.cells) {
+			this.makebutton(Integer.toString(cell.getCoefficient()), gridbag, c, container);
+		}
+	    
+	    return container;
+	}
+	
 	private Container layoutComponents(String title, float alignment) {
+		// create container basic
 	    JPanel container = new JPanel();
 	    container.setBorder(BorderFactory.createTitledBorder(title));
 	    BoxLayout layout = new BoxLayout(container, BoxLayout.X_AXIS);
 	    container.setLayout(layout);
 	    
+	    // add buttons
 	    this.addButtons(container, alignment);
 	    
 	    return container;

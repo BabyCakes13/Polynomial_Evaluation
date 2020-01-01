@@ -16,6 +16,10 @@ public class PolynomialEvaluation {
 		this.runtime = coefficients.size() + xFeed.size() - 1; // time taken to process the data
 	}
 	
+	public ArrayList<Cell> getCells() {
+		return this.cells;
+	}
+	
 	private void setItemsUp() {
 		for(int coefficient : this.coefficients) {
 			// create the cells, previous time outputs and previous time x'es
