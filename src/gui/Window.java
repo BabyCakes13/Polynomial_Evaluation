@@ -6,6 +6,8 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -79,6 +81,14 @@ public class Window {
 		JTextField pushXTextField = new JTextField();
 		pushXTextField.setBounds(110, 50, 130, 30);
 		
+		pushXButton.addActionListener(new ActionListener(){
+			   public void actionPerformed(ActionEvent ae){
+			      String textFieldValue = pushXTextField.getText();
+			      // .... do some operation on value ...
+			      System.out.println(textFieldValue);
+			   }
+			});
+		
 		gridbag.setConstraints(pushXLabel, constraint1);
 		gridbag.setConstraints(pushXButton, constraint1);
 		gridbag.setConstraints(flushButton, constraint1);
@@ -93,7 +103,6 @@ public class Window {
 		return container;
 	}
 	
-
 	public Container createCellsContainer() {
 		JPanel container = new JPanel();
 		container.setBorder(BorderFactory.createTitledBorder("Cells"));
