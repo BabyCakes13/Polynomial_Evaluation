@@ -84,7 +84,13 @@ public class Window {
 		pushXButton.addActionListener(new ActionListener(){
 			   public void actionPerformed(ActionEvent ae){
 			      String textFieldValue = pushXTextField.getText();
-			      triggerPressX(textFieldValue);
+			      handlePressX(textFieldValue);
+			   }
+			});
+		
+		flushButton.addActionListener(new ActionListener(){
+			   public void actionPerformed(ActionEvent ae){
+			      handleFlush();
 			   }
 			});
 		
@@ -102,19 +108,22 @@ public class Window {
 		return container;
 	}
 	
-	private boolean triggerPressX(String textFieldValue) {
-		int x = 0;
+	private void handlePressX(String textFieldValue) {
+		int x;
 		try {
 			x = Integer.parseInt(textFieldValue);
 		} catch (NumberFormatException e) {
 			 // e.printStackTrace();
 			System.out.println("Please enter a number for x.");
-			return false;
+			return;
 		}
 		System.out.println(x);
 		// TODO call polyEval function here
-		this.polyEval.startProcessingWithGUI(x);
-		return true;
+		this.polyEval.handlePressXGUI(x);
+	}
+	
+	private void handleFlush() {
+		this.polyEval.handleFlushGUI();
 	}
 	
 	public Container createCellsContainer() {

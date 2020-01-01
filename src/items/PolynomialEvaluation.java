@@ -36,10 +36,29 @@ public class PolynomialEvaluation {
 		}
 	}
 	
-	public void startProcessingWithGUI(int x) {
+	public void handleFlushGUI() {
+		while(this.runtimeLeftGUI <= this.runtime) {
+			this.feedDataGUI(FLUSH_VALUE);
+			
+			System.out.print ("Cell Inputs:  ");
+			this.displayParsing(this.previousTimeOutputs);
+			
+			this.parseCells(); // parse and update outputs and x'es through cells
+			
+			System.out.print ("Cell Outputs: ");
+			this.displayParsing(this.previousTimeOutputs);
+			System.out.println("");
+			
+			this.runtimeLeftGUI++;
+		}
+	}
+	
+	public void handlePressXGUI(int x) {
+		// System.out.println("handlePressXGUI for x " + x);
 		if (this.runtimeLeftGUI > this.runtime) {
 			return;
 		} else {
+			// System.out.println("handlePressXGUI on else branch.");
 			this.feedDataGUI(x);
 			
 			System.out.print ("Cell Inputs:  ");
@@ -50,6 +69,8 @@ public class PolynomialEvaluation {
 			System.out.print ("Cell Outputs: ");
 			this.displayParsing(this.previousTimeOutputs);
 			System.out.println("");
+			
+			this.runtimeLeftGUI++;
 		}
 		
 	}
