@@ -23,13 +23,20 @@ import items.Cell;
 import items.PolynomialEvaluation;
 
 public class Window {
-	private PolynomialEvaluation polyEval;
+	private PolynomialEvaluation polynomialEvaluator;
+	private ArrayList<Float> propagatedInputs;
+	private ArrayList<Float> propagatedOutputs;
+	private Float propagatedResult;
+	private Float propagatedX;
 	
 	public Window(PolynomialEvaluation polyEval) {
-		this.polyEval = polyEval;
+		this.polynomialEvaluator = polyEval;
 		this.setUpFrame();
 	}
 
+	/**
+	 * Method which sets up the main frame for the GUI.
+	 */
 	public void setUpFrame() {
 		JFrame frame = new JFrame("Polynomial Evaluation");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,15 +52,12 @@ public class Window {
 
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
-
-	}
-
-	protected void makebutton(String name, GridBagLayout gridbag, GridBagConstraints c, JPanel container) {
-		Button button = new Button(name);
-		gridbag.setConstraints(button, c);
-		container.add(button);
 	}
 	
+	/**
+	 * Method which creates the control container which handles the polynomial evaluation controls.
+	 * @return Container: The container responsible for the polynomial evaluation.
+	 */
 	public Container createControlContainer() {
 		JPanel container = new JPanel();
 		container.setBorder(BorderFactory.createTitledBorder("Control"));
@@ -68,14 +72,11 @@ public class Window {
 		
 		JButton pushXButton = new JButton("PUSH X");
 		JButton flushButton = new JButton("FLUSH");
-		
 		JLabel pushXLabel = new JLabel();
-		pushXLabel.setText("Enter the value of the X to be pushed to the flow:");
-		pushXLabel.setBounds(10, 10, 100, 100);
-		
 		JTextField pushXTextField = new JTextField();
-		pushXTextField.setBounds(110, 50, 130, 30);
 		
+		pushXLabel.setText("Enter the value of the X to be pushed to the flow:");
+
 		pushXButton.addActionListener(new ActionListener(){
 			   public void actionPerformed(ActionEvent ae){
 			      String textFieldValue = pushXTextField.getText();
@@ -103,62 +104,34 @@ public class Window {
 		return container;
 	}
 	
-	private void handlePushX(String textFieldValue) {
-		int x;
-		try {
-			x = Integer.parseInt(textFieldValue);
-		} catch (NumberFormatException e) {
-			 // e.printStackTrace();
-			System.out.println("Please enter a number for x.");
-			return;
-		}
-		
-		callForNewX(x, false);
-	}
-
-	private boolean callForNewX(int x, boolean flush) {
-		boolean b;
-		// System.out.println(x);
-		ArrayList<Float> inputs = this.polyEval.getPreviousTimeOutputs();
-		b = this.polyEval.handlePushX(x, flush);
-		ArrayList<Float> outputs = this.polyEval.getPreviousTimeOutputs();
-		System.out.println("Result: " + this.polyEval.getPropagatedResult() + " for x: " + this.polyEval.getPropagatedX());
-		
-		System.out.println("Inputs: " + inputs);
-		System.out.println("Outputs: " + outputs);
-		
-		return b;
-	}
-	
-	private void handleFlush() {
-		boolean stillRequiresFlush = true;
-		
-		while (stillRequiresFlush) {
-			stillRequiresFlush = callForNewX(0, true);
-		}
-	}
-	
+	/**
+	 * Method which creates the cells container displaying the constant data of the cells.
+	 * @return Container: The created container holding the cells in the systolic array.
+	 */
 	public Container createCellsContainer() {
 		JPanel container = new JPanel();
 		container.setBorder(BorderFactory.createTitledBorder("Cells"));
 
-		// start creating the grid
 		GridBagLayout gridbag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		container.setLayout(gridbag);
 
-		// make each cell a box
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 
-		for (Cell cell : this.polyEval.getCells()) {
+		for (Cell cell : this.polynomialEvaluator.getCells()) {
+			// create a button for each constant of the polynomial equation, simulating what the processor would hold as a constant value used for calculations.
 			this.makebutton(Float.toString(cell.getCoefficient()), gridbag, c, container);
 		}
 
 		return container;
 	}
-
+	
+	/**
+	 * Method which creates the parsing container for displaying information about what values are handled during each parse of the cells.
+	 * @return Container: The container responsible for displaying the information.
+	 */
 	private Container createParsingContainer() {
 		JPanel container = new JPanel();
 		container.setBorder(BorderFactory.createTitledBorder("Parsing"));
@@ -173,12 +146,33 @@ public class Window {
 
 		return container;
 	}
-
+	
+	private void handlePushX(String textFieldValue) {
+		int x;
+		try {
+			x = Integer.parseInt(textFieldValue);
+		} catch (NumberFormatException e) {
+			 // e.printStackTrace();
+			System.out.println("Please enter a number for x.");
+			return;
+		}
+		
+		callForNewX(x, false);
+	}
+	
+	private void handleFlush() {
+		boolean stillRequiresFlush = true;
+		
+		while (stillRequiresFlush) {
+			stillRequiresFlush = callForNewX(0, true);
+		}
+	}
+	
 	private JTable createTable() {
 		// create the head of the table representing each cell
-		String[] cells = new String[this.polyEval.getCells().size()];
+		String[] cells = new String[this.polynomialEvaluator.getCells().size()];
 		for(int i = 0; i < cells.length; i++) {
-			float cellCoefficient = this.polyEval.getCells().get(i).getCoefficient();
+			float cellCoefficient = this.polynomialEvaluator.getCells().get(i).getCoefficient();
 			cells[i] = Float.toString(cellCoefficient);
 			// System.out.println(i + " " + cells[i]);
 		}
@@ -191,5 +185,46 @@ public class Window {
 
 		JTable table = new JTable(data, cells);
 		return table;
+	}
+	
+	/**
+	 * Method which creates a new button placed in the GridBadLayout based on the input parameters.
+	 * @param name: Name of the button.
+	 * @param gridbag: The layout working on.
+	 * @param c: Grid constraints for button placement.
+	 * @param container: The container which will hold the new button.
+	 */
+	protected void makebutton(String name, GridBagLayout gridbag, GridBagConstraints c, JPanel container) {
+		Button newButton = new Button(name);
+		gridbag.setConstraints(newButton, c);
+		container.add(newButton);
+	}
+	
+	private boolean callForNewX(int x, boolean flush) {
+		boolean b;
+		// System.out.println(x);
+		ArrayList<Float> inputs = this.polynomialEvaluator.getPreviousTimeOutputs();
+		b = this.polynomialEvaluator.handlePushX(x, flush);
+		ArrayList<Float> outputs = this.polynomialEvaluator.getPreviousTimeOutputs();
+		System.out.println("Result: " + this.polynomialEvaluator.getPropagatedResult() + " for x: " + this.polynomialEvaluator.getPropagatedX());
+		
+		System.out.println("Inputs: " + inputs);
+		System.out.println("Outputs: " + outputs);
+		
+		this.propagatedInputs = inputs;
+		this.propagatedOutputs = outputs;
+		this.propagatedResult = this.polynomialEvaluator.getPropagatedResult();
+		this.propagatedX = this.polynomialEvaluator.getPropagatedX();
+		
+		this.fillTable();
+		return b;
+	}
+	
+	private void fillTable() {
+		System.out.println(this.propagatedInputs);
+		System.out.println(this.propagatedOutputs);
+		System.out.println(this.propagatedResult);
+		System.out.println(this.propagatedX);
+		// TODO fill the table with the inputs, outputs, result and x.
 	}
 }
