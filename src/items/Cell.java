@@ -9,7 +9,7 @@ public class Cell {
 	
 	public int computeCoefficient(int input, int x) {
 		int output = input * x + this.coefficient;
-		System.out.print("(" + x + ") ");
+		System.out.println(input + "*" + x + " + " + this.coefficient + " = " + output);
 		return output;
 	}
 	

@@ -34,9 +34,13 @@ public class PolynomialEvaluation {
 			ArrayList<Integer> currentOutputs = new ArrayList<Integer>();
 			ArrayList<Integer> currentXes = new ArrayList<Integer>();
 			
+			System.out.print ("Cell Inputs:  ");
+			this.displayParsing(this.previousTimeOutputs);
+			
 			this.parseCells(currentOutputs, currentXes); // parse and update outputs and x'es through cells
 			
-			this.displayParsing();
+			System.out.print ("Cell Outputs: ");
+			this.displayParsing(this.previousTimeOutputs);
 			System.out.println("");
 		}
 	}
@@ -48,8 +52,13 @@ public class PolynomialEvaluation {
 		} else {
 			// if there are no more x left to be fed, we feed fake data until the time is done.
 			this.previousTimeXes.add(0, 999999);
-			this.previousTimeOutputs.add(0, 0);
 		}
+		
+		this.previousTimeOutputs.add(0, 0);
+		
+		// get the results:
+		System.out.print("Result is " + this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1));
+		System.out.println(" for x " + this.previousTimeXes.get(this.previousTimeXes.size() -1));
 	}
 	
 	private void parseCells(ArrayList<Integer> currentOutputs, ArrayList<Integer> currentXes) {
@@ -68,9 +77,9 @@ public class PolynomialEvaluation {
 		this.previousTimeXes = currentXes;
 	}
 	
-	private void displayParsing() {
+	private void displayParsing(ArrayList<Integer> al) {
 		System.out.println("");
-		for(Integer output: previousTimeOutputs) {
+		for(Integer output: al) {
 			System.out.print(output + ", ");
 		}
 		System.out.println("");
