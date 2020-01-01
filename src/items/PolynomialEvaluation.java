@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 public class PolynomialEvaluation {
 	private ArrayList<Integer> coefficients = new ArrayList<Integer>(Arrays.asList(2, -6, 2, -1));
-	private ArrayList<Integer> xFeed = new ArrayList<Integer>(Arrays.asList(3, 4, 5));
 	private ArrayList<Cell> cells = new ArrayList<Cell>();
 	private ArrayList<Integer> previousTimeOutputs = new ArrayList<Integer>();
 	private ArrayList<Integer> previousTimeXes = new ArrayList<Integer>();
@@ -19,7 +18,7 @@ public class PolynomialEvaluation {
 	
 	public PolynomialEvaluation() {
 		this.setItemsUp();
-		this.runtime = coefficients.size() + xFeed.size() - 1; // time taken to process the data
+		this.runtime = coefficients.size() - 1; // time taken to process the data
 	}
 	
 	public ArrayList<Cell> getCells() {
@@ -38,7 +37,7 @@ public class PolynomialEvaluation {
 	
 	public void handleFlush() {
 		while(this.time <= this.runtime) {
-			this.feedDataGUI(FLUSH_VALUE);
+			this.feedData(FLUSH_VALUE);
 			
 			System.out.print ("Cell Inputs:  ");
 			this.displayParsing(this.previousTimeOutputs);
@@ -54,10 +53,11 @@ public class PolynomialEvaluation {
 	}
 	
 	public void handlePushX(int x) {
+		this.runtime =  coefficients.size() + 1;
 		if (this.time > this.runtime) {
 			return;
 		} else {
-			this.feedDataGUI(x);
+			this.feedData(x);
 			
 			System.out.print ("Cell Inputs:  ");
 			this.displayParsing(this.previousTimeOutputs);
@@ -73,7 +73,7 @@ public class PolynomialEvaluation {
 		
 	}
 	
-	public void feedDataGUI(int x) {
+	public void feedData(int x) {
 		if(x != this.FLUSH_VALUE) {
 			  this.previousTimeXes.add(0, x); 
 		} else {
