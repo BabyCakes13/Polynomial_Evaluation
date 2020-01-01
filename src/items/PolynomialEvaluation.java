@@ -15,7 +15,7 @@ public class PolynomialEvaluation {
 	private int FLUSH_VALUE = 99999;
 	
 	private int runtime;
-	private int runtimeLeftGUI;
+	private int time;
 	
 	public PolynomialEvaluation() {
 		this.setItemsUp();
@@ -36,8 +36,8 @@ public class PolynomialEvaluation {
 		}
 	}
 	
-	public void handleFlushGUI() {
-		while(this.runtimeLeftGUI <= this.runtime) {
+	public void handleFlush() {
+		while(this.time <= this.runtime) {
 			this.feedDataGUI(FLUSH_VALUE);
 			
 			System.out.print ("Cell Inputs:  ");
@@ -49,16 +49,14 @@ public class PolynomialEvaluation {
 			this.displayParsing(this.previousTimeOutputs);
 			System.out.println("");
 			
-			this.runtimeLeftGUI++;
+			this.time++;
 		}
 	}
 	
-	public void handlePressXGUI(int x) {
-		// System.out.println("handlePressXGUI for x " + x);
-		if (this.runtimeLeftGUI > this.runtime) {
+	public void handlePushX(int x) {
+		if (this.time > this.runtime) {
 			return;
 		} else {
-			// System.out.println("handlePressXGUI on else branch.");
 			this.feedDataGUI(x);
 			
 			System.out.print ("Cell Inputs:  ");
@@ -70,7 +68,7 @@ public class PolynomialEvaluation {
 			this.displayParsing(this.previousTimeOutputs);
 			System.out.println("");
 			
-			this.runtimeLeftGUI++;
+			this.time++;
 		}
 		
 	}
@@ -80,37 +78,6 @@ public class PolynomialEvaluation {
 			  this.previousTimeXes.add(0, x); 
 		} else {
 			this.previousTimeXes.add(0, this.FLUSH_VALUE);
-		}
-		
-		this.previousTimeOutputs.add(0, 0);
-		
-		// get the results:
-		System.out.print("Result is " + this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1));
-		System.out.println(" for x " + this.previousTimeXes.get(this.previousTimeXes.size() -1));
-	}
-	
-	public void startProcessing() {
-		for(int time = 0; time < this.runtime; time++) {
-			this.feedData(time);
-			
-			System.out.print ("Cell Inputs:  ");
-			this.displayParsing(this.previousTimeOutputs);
-			
-			this.parseCells(); // parse and update outputs and x'es through cells
-			
-			System.out.print ("Cell Outputs: ");
-			this.displayParsing(this.previousTimeOutputs);
-			System.out.println("");
-		}
-	}
-	
-	private void feedData(int time) {
-		if(time < xFeed.size()) {
-			  // we feed one x each time, as long as there are x values left.
-			  this.previousTimeXes.add(0, xFeed.get(time)); 
-		} else {
-			// if there are no more x left to be fed, we feed fake data until the time is done.
-			this.previousTimeXes.add(0, 999999);
 		}
 		
 		this.previousTimeOutputs.add(0, 0);

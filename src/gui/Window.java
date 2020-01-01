@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -84,7 +85,7 @@ public class Window {
 		pushXButton.addActionListener(new ActionListener(){
 			   public void actionPerformed(ActionEvent ae){
 			      String textFieldValue = pushXTextField.getText();
-			      handlePressX(textFieldValue);
+			      handlePushX(textFieldValue);
 			   }
 			});
 		
@@ -108,7 +109,7 @@ public class Window {
 		return container;
 	}
 	
-	private void handlePressX(String textFieldValue) {
+	private void handlePushX(String textFieldValue) {
 		int x;
 		try {
 			x = Integer.parseInt(textFieldValue);
@@ -117,13 +118,12 @@ public class Window {
 			System.out.println("Please enter a number for x.");
 			return;
 		}
-		System.out.println(x);
-		// TODO call polyEval function here
-		this.polyEval.handlePressXGUI(x);
+		// System.out.println(x);
+		this.polyEval.handlePushX(x);
 	}
 	
 	private void handleFlush() {
-		this.polyEval.handleFlushGUI();
+		this.polyEval.handleFlush();
 	}
 	
 	public Container createCellsContainer() {
@@ -163,7 +163,13 @@ public class Window {
 	}
 
 	private JTable createTable() {
-		String[] columnNames = { "Time", "Cell", "Input", "Output", "X" };
+		// create the head of the table representing each cell
+		String[] cells = new String[this.polyEval.getCells().size()];
+		for(int i = 0; i < cells.length; i++) {
+			int cellCoefficient = this.polyEval.getCells().get(i).getCoefficient();
+			cells[i] = Integer.toString(cellCoefficient);
+			// System.out.println(i + " " + cells[i]);
+		}
 
 		Object[][] data = { { "Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false) },
 				{ "John", "Doe", "Rowing", new Integer(3), new Boolean(true) },
@@ -171,7 +177,7 @@ public class Window {
 				{ "Jane", "White", "Speed reading", new Integer(20), new Boolean(true) },
 				{ "Joe", "Brown", "Pool", new Integer(10), new Boolean(false) } };
 
-		JTable table = new JTable(data, columnNames);
+		JTable table = new JTable(data, cells);
 		return table;
 	}
 }
