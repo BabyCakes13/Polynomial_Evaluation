@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -26,6 +27,7 @@ public class ParseContainer extends Container{
 	private JTextArea addParseScreen() {
 		JTextArea textArea = new JTextArea();
 		textArea.setEditable(false);
+		textArea.setFont(new Font("Monospace", Font.PLAIN, 14));
 		
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -36,9 +38,22 @@ public class ParseContainer extends Container{
 		return textArea;
 	}
 	
-	public void addData(ArrayList<Float> parseData) {
-		this.parseScreen.append(Float.toString(parseData.get(0)));
+	public void addData(ArrayList<Float> inputs, ArrayList<Float> outputs, float result, float x) {
+		this.parseScreen.append("\n");
+		for(int i = 0; i < inputs.size(); i++){
+		  float input = inputs.get(i);
+		  float output = outputs.get(i);
+		  
+		  String equation = this.createEquation(input, output, result, x);
+		  this.parseScreen.append(equation);
+		}
+
 		this.parseContainer.revalidate();
 		this.parseContainer.repaint();
+	}
+	
+	public String createEquation(float input, float output, float result, float x) {
+		String equation = "(" + input + "*" + x + " + " +  "coefficient)(" + output + ")   ";
+		return equation;
 	}
 }

@@ -17,12 +17,15 @@ import items.PolynomialEvaluator;
 public class ControlContainer extends Container {
 	private JPanel controlContainer;
 	private ParseContainer parseContainer;
+	private ResultContainer resultContainer;
+	
 	private PolynomialEvaluator pe;
 	
-	public ControlContainer(JFrame frame, ParseContainer parseContainer, PolynomialEvaluator pe) {
+	public ControlContainer(JFrame frame, ParseContainer parseContainer, ResultContainer resultContainer, PolynomialEvaluator pe) {
 		super(frame, "Control");
 		this.controlContainer = this.container;
 		this.parseContainer = parseContainer;
+		this.resultContainer = resultContainer;
 		this.pe = pe;
 		
 		this.addPushX();
@@ -114,7 +117,11 @@ public class ControlContainer extends Container {
 		System.out.println("Inputs: " + propagatedInputs);
 		System.out.println("Outputs: " + propagatedOutputs);
 
-		this.parseContainer.addData(propagatedInputs);
+		this.parseContainer.addData(propagatedInputs, propagatedOutputs, propagatedResult, propagatedX);
+		if (!(Double.isNaN(propagatedResult))) {
+			System.out.println("PR: " + propagatedResult);
+			this.resultContainer.addResult(propagatedResult, propagatedX, this.pe.getCells());
+		}
 		return b;
 	}
 }
