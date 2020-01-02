@@ -62,7 +62,12 @@ public class PolynomialEvaluator {
 			return false;
 		} else {			
 			this.parseCells(x);
-			this.propagate(x);
+			
+			this.previousTimeOutputs = currentOutputs;
+			this.previousTimeXes = currentXes;
+			this.result = this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1);
+			this.x = this.previousTimeXes.get(this.previousTimeXes.size() -1);
+			
 			this.time++;
 			return true;
 		}
@@ -94,32 +99,11 @@ public class PolynomialEvaluator {
 			currentOutputs.add(output);
 			currentXes.add(propagatedX);
 
-		}
-		System.out.println("Current outputs: " + currentOutputs.toString());
-		this.previousTimeOutputs = currentOutputs;
-		this.previousTimeXes = currentXes;
+		}	
 	}
-	
-	public void propagate(float x) {
-		// get the results:
-		System.out.print("Result is " + this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1));
-		System.out.println(" for x " + this.previousTimeXes.get(this.previousTimeXes.size() -1));
-		
-		this.result = this.previousTimeOutputs.get(this.previousTimeOutputs.size() -1);
-		this.x = this.previousTimeXes.get(this.previousTimeXes.size() -1);
-	}
-	
 	
 	public Object[] sendData(int time, float input, float output, float x) {
 		Object[] dataLine = {time, input, output, x};
 		return dataLine;
-	}
-	
-	private void displayParsing(ArrayList<Float> al) {
-		System.out.println("");
-		for(Float output: al) {
-			System.out.print(output + ", ");
-		}
-		System.out.println("");
 	}
 }

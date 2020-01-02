@@ -29,7 +29,7 @@ public class ResultContainer extends Container{
 	private JTextArea addParseScreen() {
 		JTextArea textArea = new JTextArea();
 		textArea.setEditable(false);
-		textArea.setFont(new Font("Monospace", Font.PLAIN, 14));
+		textArea.setFont(new Font("Monospace", Font.PLAIN, 18));
 		
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -49,13 +49,13 @@ public class ResultContainer extends Container{
 	}
 	
 	public StringBuilder createEquation(float result, float x, ArrayList<Cell> cells) {
-		StringBuilder bigEquation = new StringBuilder("0*x + "  + cells.get(cells.size()-1).getCoefficient() + ")");
-		for(int i = 0; i < cells.size(); i++) {
+		StringBuilder bigEquation = new StringBuilder("0*x + "  + cells.get(0).getCoefficient() + ")");
+		for(int i = 1; i < cells.size(); i++) {
 			bigEquation.insert(0, "(");
 			String tinyEquation = "*x + " + cells.get(i).getCoefficient() + ")";
 			bigEquation.append(tinyEquation);
 		}
-		bigEquation.append(" = " + result + "(x = " + x + ")");
+		bigEquation.append(" = " + result + " (x = " + x + ")");
 		
 		return bigEquation;
 	}
