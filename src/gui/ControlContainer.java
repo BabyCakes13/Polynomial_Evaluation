@@ -1,9 +1,9 @@
 package gui;
 
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -12,13 +12,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import items.PolynomialEvaluation;
+
 public class ControlContainer extends Container {
-	// TODO add functionality class to press x and flush
 	private JPanel controlContainer;
+	private ParseContainer parseContainer;
+	private PolynomialEvaluation pe;
 	
-	public ControlContainer(JFrame frame) {
+	public ControlContainer(JFrame frame, ParseContainer parseContainer, PolynomialEvaluation pe) {
 		super(frame, "Control");
 		this.controlContainer = this.container;
+		this.parseContainer = parseContainer;
+		this.pe = pe;
 		
 		this.addPushX();
 		this.addFlush();
@@ -83,37 +88,33 @@ public class ControlContainer extends Container {
 		try {
 			x = Integer.parseInt(textFieldValue);
 		} catch (NumberFormatException e) {
-			 // e.printStackTrace();
 			System.out.println("Please enter a number for x.");
 			return;
 		}
 		
-		//solveForNewX(x, false);
+		solveForNewX(x, false);
 	}
 	
 	private void handleFlush() {
 		boolean stillRequiresFlush = true;
 		
 		while (stillRequiresFlush) {
-			stillRequiresFlush = false; //solveForNewX(0, true);
+			stillRequiresFlush = solveForNewX(0, true);
 		}
 	}
 	
-	/*private boolean solveForNewX(int x, boolean flush) {
-		ArrayList<Float> propagatedInputs = this.polynomialEvaluator.getPreviousTimeOutputs();
-		boolean b = this.polynomialEvaluator.handlePushX(x, flush);
-		ArrayList<Float> propagatedOutputs = this.polynomialEvaluator.getPreviousTimeOutputs();
-		float propagatedResult = this.polynomialEvaluator.getPropagatedResult();
-		float propagatedX = this.polynomialEvaluator.getPropagatedX();
+	public boolean solveForNewX(int x, boolean flush) {
+		ArrayList<Float> propagatedInputs = this.pe.getPreviousTimeOutputs();
+		boolean b = this.pe.handlePushX(x, flush);
+		ArrayList<Float> propagatedOutputs = this.pe.getPreviousTimeOutputs();
+		float propagatedResult = this.pe.getPropagatedResult();
+		float propagatedX = this.pe.getPropagatedX();
 		
-		System.out.println("Result: " + this.polynomialEvaluator.getPropagatedResult() + " for x: " + this.polynomialEvaluator.getPropagatedX());
+		System.out.println("Result: " + propagatedResult + " for x: " + propagatedX);
 		System.out.println("Inputs: " + propagatedInputs);
 		System.out.println("Outputs: " + propagatedOutputs);
 
-		
-		JTable newTable = this.createTable(propagatedInputs, propagatedOutputs, propagatedResult, propagatedX);
-		// this.addNewTable(newTable);
-		this.addLines(propagatedInputs, this.parseDisplay);
+		this.parseContainer.addData(propagatedInputs);
 		return b;
-	}*/
+	}
 }
