@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import items.Cell;
@@ -24,11 +26,11 @@ import items.PolynomialEvaluation;
 
 public class Window {
 	private PolynomialEvaluation polynomialEvaluator;
-	private ArrayList<Float> propagatedInputs;
-	private ArrayList<Float> propagatedOutputs;
-	private Float propagatedResult;
-	private Float propagatedX;
-	
+	private Container controlContainer;
+	private Container cellContainer;
+	private Container tableContainer;
+	private JTextArea parseDisplay;
+
 	public Window(PolynomialEvaluation polyEval) {
 		this.polynomialEvaluator = polyEval;
 		this.setUpFrame();
@@ -42,13 +44,14 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(4, 1));
 
-		Container controlContainer = this.createControlContainer();
-		Container cellContainer = this.createCellsContainer();
-		Container parsingContainer = this.createParsingContainer();
+		this.controlContainer = this.createControlContainer();
+		this.cellContainer = this.createCellsContainer();
+		this.tableContainer = this.createParsingContainer();
+		this.parseDisplay = this.addParseDisplay();
 
 		frame.add(controlContainer);
 		frame.add(cellContainer);
-		frame.add(parsingContainer);
+		frame.add(tableContainer);
 
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
@@ -135,16 +138,17 @@ public class Window {
 	private Container createParsingContainer() {
 		JPanel container = new JPanel();
 		container.setBorder(BorderFactory.createTitledBorder("Parsing"));
-
-		JTable table = this.createTable();
-		JScrollPane scrollPane = new JScrollPane(table);
-		table.setFillsViewportHeight(true);
-
 		container.setLayout(new BorderLayout());
-		container.add(table.getTableHeader(), BorderLayout.PAGE_START);
-		container.add(table, BorderLayout.CENTER);
 
 		return container;
+	}
+	
+	private void addNewTable(JTable table) {
+		JScrollPane scrollPane = new JScrollPane(table);
+		table.setFillsViewportHeight(true);
+		this.tableContainer.add(table.getTableHeader(), BorderLayout.PAGE_START);
+		this.tableContainer.add(table, BorderLayout.AFTER_LAST_LINE);
+		this.tableContainer.revalidate();
 	}
 	
 	private void handlePushX(String textFieldValue) {
@@ -157,18 +161,18 @@ public class Window {
 			return;
 		}
 		
-		callForNewX(x, false);
+		solveForNewX(x, false);
 	}
 	
 	private void handleFlush() {
 		boolean stillRequiresFlush = true;
 		
 		while (stillRequiresFlush) {
-			stillRequiresFlush = callForNewX(0, true);
+			stillRequiresFlush = solveForNewX(0, true);
 		}
 	}
 	
-	private JTable createTable() {
+	private JTable createTable(ArrayList<Float> propagatedInputs, ArrayList<Float> propagatedOutputs,float propagatedResult,float propagatedX) {
 		// create the head of the table representing each cell
 		String[] cells = new String[this.polynomialEvaluator.getCells().size()];
 		for(int i = 0; i < cells.length; i++) {
@@ -176,13 +180,8 @@ public class Window {
 			cells[i] = Float.toString(cellCoefficient);
 			// System.out.println(i + " " + cells[i]);
 		}
-
-		Object[][] data = { { "Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false) },
-				{ "John", "Doe", "Rowing", new Integer(3), new Boolean(true) },
-				{ "Sue", "Black", "Knitting", new Integer(2), new Boolean(false) },
-				{ "Jane", "White", "Speed reading", new Integer(20), new Boolean(true) },
-				{ "Joe", "Brown", "Pool", new Integer(10), new Boolean(false) } };
-
+		
+		Object[][] data = this.fillTable(propagatedInputs, propagatedOutputs, propagatedResult, propagatedX);
 		JTable table = new JTable(data, cells);
 		return table;
 	}
@@ -200,31 +199,54 @@ public class Window {
 		container.add(newButton);
 	}
 	
-	private boolean callForNewX(int x, boolean flush) {
-		boolean b;
-		// System.out.println(x);
-		ArrayList<Float> inputs = this.polynomialEvaluator.getPreviousTimeOutputs();
-		b = this.polynomialEvaluator.handlePushX(x, flush);
-		ArrayList<Float> outputs = this.polynomialEvaluator.getPreviousTimeOutputs();
+	private boolean solveForNewX(int x, boolean flush) {
+		ArrayList<Float> propagatedInputs = this.polynomialEvaluator.getPreviousTimeOutputs();
+		boolean b = this.polynomialEvaluator.handlePushX(x, flush);
+		ArrayList<Float> propagatedOutputs = this.polynomialEvaluator.getPreviousTimeOutputs();
+		float propagatedResult = this.polynomialEvaluator.getPropagatedResult();
+		float propagatedX = this.polynomialEvaluator.getPropagatedX();
+		
 		System.out.println("Result: " + this.polynomialEvaluator.getPropagatedResult() + " for x: " + this.polynomialEvaluator.getPropagatedX());
+		System.out.println("Inputs: " + propagatedInputs);
+		System.out.println("Outputs: " + propagatedOutputs);
+
 		
-		System.out.println("Inputs: " + inputs);
-		System.out.println("Outputs: " + outputs);
-		
-		this.propagatedInputs = inputs;
-		this.propagatedOutputs = outputs;
-		this.propagatedResult = this.polynomialEvaluator.getPropagatedResult();
-		this.propagatedX = this.polynomialEvaluator.getPropagatedX();
-		
-		this.fillTable();
+		JTable newTable = this.createTable(propagatedInputs, propagatedOutputs, propagatedResult, propagatedX);
+		// this.addNewTable(newTable);
+		this.addLines(propagatedInputs, this.parseDisplay);
 		return b;
 	}
 	
-	private void fillTable() {
-		System.out.println(this.propagatedInputs);
-		System.out.println(this.propagatedOutputs);
-		System.out.println(this.propagatedResult);
-		System.out.println(this.propagatedX);
+	private Object[][] fillTable(ArrayList<Float> propagatedInputs, ArrayList<Float> propagatedOutputs,float propagatedResult,float propagatedX) {
+		System.out.println("Propagated inputs: " + propagatedInputs);
+		System.out.println("Propagatd outputs: " + propagatedOutputs);
+		System.out.println("Propagated result: " + propagatedResult);
+		System.out.println("Propagated X: " + propagatedX);
+		
+		Object[][] parsedData = { { "Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false) },
+				{ "John", "Doe", "Rowing", new Integer(3), new Boolean(true) },
+				{ "Sue", "Black", "Knitting", new Integer(2), new Boolean(false) },
+				{ "Jane", "White", "Speed reading", new Integer(20), new Boolean(true) },
+				{ "Joe", "Brown", "Pool", new Integer(10), new Boolean(false)}} ;
 		// TODO fill the table with the inputs, outputs, result and x.
+		return parsedData;
+	}
+	
+	private void addLines(ArrayList<Float> parseData, JTextArea parseDisplay) {
+		parseDisplay.append(Float.toString(parseData.get(0)));
+		this.tableContainer.revalidate();
+		this.tableContainer.repaint();
+	}
+	
+	private JTextArea addParseDisplay() {
+		JTextArea textArea = new JTextArea();
+		textArea.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		this.tableContainer.add(scrollPane);
+		this.tableContainer.revalidate();
+		
+		return textArea;
 	}
 }
