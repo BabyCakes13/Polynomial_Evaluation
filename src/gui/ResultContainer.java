@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -28,6 +29,7 @@ public class ResultContainer extends Container{
 	private JTextArea addParseScreen() {
 		JTextArea textArea = new JTextArea();
 		textArea.setEditable(false);
+		textArea.setFont(new Font("Monospace", Font.PLAIN, 14));
 		
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -39,18 +41,21 @@ public class ResultContainer extends Container{
 	}
 	
 	public void addResult(float result, float x, ArrayList<Cell> cells) {
-		String bigEquation = this.createEquation(result, x, cells);
+		String bigEquation = this.createEquation(result, x, cells).toString();
 		this.parseScreen.append(bigEquation);
 		this.parseScreen.append("\n");
 		this.resultContainer.revalidate();
 		this.resultContainer.repaint();
 	}
 	
-	public String createEquation(float result, float x, ArrayList<Cell> cells) {
-		String bigEquation = "(0*" + x + " + "  + cells.get(cells.size()-1) + ")";
-		for(Cell cell: cells) {
-			// nothing yet
+	public StringBuilder createEquation(float result, float x, ArrayList<Cell> cells) {
+		StringBuilder bigEquation = new StringBuilder("0*x + "  + cells.get(cells.size()-1).getCoefficient() + ")");
+		for(int i = 0; i < cells.size(); i++) {
+			bigEquation.insert(0, "(");
+			String tinyEquation = "*x + " + cells.get(i).getCoefficient() + ")";
+			bigEquation.append(tinyEquation);
 		}
+		bigEquation.append(" = " + result + "(x = " + x + ")");
 		
 		return bigEquation;
 	}
