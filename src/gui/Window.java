@@ -3,7 +3,6 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -23,10 +22,11 @@ import javax.swing.JTextField;
 
 import items.Cell;
 import items.PolynomialEvaluation;
+import gui.ControlContainer;
 
 public class Window {
 	private PolynomialEvaluation polynomialEvaluator;
-	private Container controlContainer;
+	private ControlContainer controlContainer;
 	private Container cellContainer;
 	private Container tableContainer;
 	private JTextArea parseDisplay;
@@ -44,67 +44,18 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(4, 1));
 
-		this.controlContainer = this.createControlContainer();
+		// this.controlContainer = this.createControlContainer();
+		this.controlContainer = new ControlContainer(frame);
 		this.cellContainer = this.createCellsContainer();
 		this.tableContainer = this.createParsingContainer();
 		this.parseDisplay = this.addParseDisplay();
 
-		frame.add(controlContainer);
+		// frame.add(controlContainer);
 		frame.add(cellContainer);
 		frame.add(tableContainer);
 
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
-	}
-	
-	/**
-	 * Method which creates the control container which handles the polynomial evaluation controls.
-	 * @return Container: The container responsible for the polynomial evaluation.
-	 */
-	public Container createControlContainer() {
-		JPanel container = new JPanel();
-		container.setBorder(BorderFactory.createTitledBorder("Control"));
-		
-		GridBagLayout gridbag = new GridBagLayout();
-		GridBagConstraints constraint1 = new GridBagConstraints();
-		GridBagConstraints constraint2 = new GridBagConstraints();
-
-		container.setLayout(gridbag);
-		constraint1.fill = GridBagConstraints.BOTH;
-		constraint2.fill = GridBagConstraints.BOTH;
-		
-		JButton pushXButton = new JButton("PUSH X");
-		JButton flushButton = new JButton("FLUSH");
-		JLabel pushXLabel = new JLabel();
-		JTextField pushXTextField = new JTextField();
-		
-		pushXLabel.setText("Enter the value of the X to be pushed to the flow:");
-
-		pushXButton.addActionListener(new ActionListener(){
-			   public void actionPerformed(ActionEvent ae){
-			      String textFieldValue = pushXTextField.getText();
-			      handlePushX(textFieldValue);
-			   }
-			});
-		
-		flushButton.addActionListener(new ActionListener(){
-			   public void actionPerformed(ActionEvent ae){
-			      handleFlush();
-			   }
-			});
-		
-		gridbag.setConstraints(pushXLabel, constraint1);
-		gridbag.setConstraints(pushXButton, constraint1);
-		gridbag.setConstraints(flushButton, constraint1);
-		constraint2.weightx = 0.5;
-		gridbag.setConstraints(pushXTextField, constraint2);
-		
-		container.add(pushXLabel);
-		container.add(pushXTextField);
-		container.add(pushXButton);
-		container.add(flushButton);
-		
-		return container;
 	}
 	
 	/**
@@ -149,27 +100,6 @@ public class Window {
 		this.tableContainer.add(table.getTableHeader(), BorderLayout.PAGE_START);
 		this.tableContainer.add(table, BorderLayout.AFTER_LAST_LINE);
 		this.tableContainer.revalidate();
-	}
-	
-	private void handlePushX(String textFieldValue) {
-		int x;
-		try {
-			x = Integer.parseInt(textFieldValue);
-		} catch (NumberFormatException e) {
-			 // e.printStackTrace();
-			System.out.println("Please enter a number for x.");
-			return;
-		}
-		
-		solveForNewX(x, false);
-	}
-	
-	private void handleFlush() {
-		boolean stillRequiresFlush = true;
-		
-		while (stillRequiresFlush) {
-			stillRequiresFlush = solveForNewX(0, true);
-		}
 	}
 	
 	private JTable createTable(ArrayList<Float> propagatedInputs, ArrayList<Float> propagatedOutputs,float propagatedResult,float propagatedX) {
