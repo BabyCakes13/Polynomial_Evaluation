@@ -12,14 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import items.PolynomialEvaluation;
+import items.PolynomialEvaluator;
 
 public class ControlContainer extends Container {
 	private JPanel controlContainer;
 	private ParseContainer parseContainer;
-	private PolynomialEvaluation pe;
+	private PolynomialEvaluator pe;
 	
-	public ControlContainer(JFrame frame, ParseContainer parseContainer, PolynomialEvaluation pe) {
+	public ControlContainer(JFrame frame, ParseContainer parseContainer, PolynomialEvaluator pe) {
 		super(frame, "Control");
 		this.controlContainer = this.container;
 		this.parseContainer = parseContainer;

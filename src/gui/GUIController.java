@@ -1,6 +1,6 @@
 package gui;
 
-import items.PolynomialEvaluation;
+import items.PolynomialEvaluator;
 
 import java.awt.GridLayout;
 
@@ -8,15 +8,15 @@ import javax.swing.JFrame;
 
 import gui.ControlContainer;
 
-public class Window {
-	private PolynomialEvaluation polynomialEvaluator;
+public class GUIController {
+	private PolynomialEvaluator polynomialEvaluator;
 	@SuppressWarnings("unused")
 	private ControlContainer controlContainer;
 	@SuppressWarnings("unused")
 	private CellContainer cellContainer;
 	private ParseContainer parseContainer;
 
-	public Window(PolynomialEvaluation polyEval) {
+	public GUIController(PolynomialEvaluator polyEval) {
 		this.polynomialEvaluator = polyEval;
 		this.setUpFrame();
 	}

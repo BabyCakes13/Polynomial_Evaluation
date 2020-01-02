@@ -3,7 +3,7 @@ package items;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PolynomialEvaluation {
+public class PolynomialEvaluator {
 	private ArrayList<Float> coefficients = new ArrayList<Float>(Arrays.asList(2f, -6f, 2f, -1f));
 	private ArrayList<Cell> cells = new ArrayList<Cell>();
 	private ArrayList<Float> previousTimeOutputs = new ArrayList<Float>();
@@ -19,7 +19,7 @@ public class PolynomialEvaluation {
 	private int runtime;
 	private int time;
 	
-	public PolynomialEvaluation() {
+	public PolynomialEvaluator() {
 		this.setItemsUp();
 		this.runtime = coefficients.size() - 1; // time taken to process the data
 	}

@@ -1,17 +1,16 @@
 package items;
 
-import items.PolynomialEvaluation;
+import items.PolynomialEvaluator;
 
 import java.util.ArrayList;
 
-import gui.Window;
+import gui.GUIController;
 
 public class Main {
 
 	public static void main(String[] args) {
-		PolynomialEvaluation pe = new PolynomialEvaluation();
-		// pe.startProcessing();
-		Window w = new Window(pe);
+		PolynomialEvaluator pe = new PolynomialEvaluator();
+		GUIController GUIcontroller = new GUIController(pe);
 	}
 
 }
