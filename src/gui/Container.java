@@ -11,16 +11,16 @@ public class Container {
 	protected JPanel container;
 	protected GridBagLayout containerLayout;
 	
-	public Container(JFrame frame) {
+	public Container(JFrame frame, String containerTitle) {
 		this.frame = frame;
-		this.container = this.createBasicContainer();
+		this.container = this.createBasicContainer(containerTitle);
 		this.containerLayout = this.setLayout();
 		this.container.setLayout(containerLayout);
 	}
 	
-	public JPanel createBasicContainer() {
+	public JPanel createBasicContainer(String containerTitle) {
 		JPanel container = new JPanel();
-		container.setBorder(BorderFactory.createTitledBorder("Parsing"));
+		container.setBorder(BorderFactory.createTitledBorder(containerTitle));
 		
 		return container;
 	}

@@ -27,7 +27,7 @@ import gui.ControlContainer;
 public class Window {
 	private PolynomialEvaluation polynomialEvaluator;
 	private ControlContainer controlContainer;
-	private Container cellContainer;
+	private CellContainer cellContainer;
 	private Container tableContainer;
 	private JTextArea parseDisplay;
 
@@ -46,40 +46,17 @@ public class Window {
 
 		// this.controlContainer = this.createControlContainer();
 		this.controlContainer = new ControlContainer(frame);
-		this.cellContainer = this.createCellsContainer();
+		// this.cellContainer = this.createCellsContainer();
+		this.cellContainer = new CellContainer(frame, this.polynomialEvaluator.getCells());
 		this.tableContainer = this.createParsingContainer();
 		this.parseDisplay = this.addParseDisplay();
 
 		// frame.add(controlContainer);
-		frame.add(cellContainer);
+		// frame.add(cellContainer);
 		frame.add(tableContainer);
 
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
-	}
-	
-	/**
-	 * Method which creates the cells container displaying the constant data of the cells.
-	 * @return Container: The created container holding the cells in the systolic array.
-	 */
-	public Container createCellsContainer() {
-		JPanel container = new JPanel();
-		container.setBorder(BorderFactory.createTitledBorder("Cells"));
-
-		GridBagLayout gridbag = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		container.setLayout(gridbag);
-
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-
-		for (Cell cell : this.polynomialEvaluator.getCells()) {
-			// create a button for each constant of the polynomial equation, simulating what the processor would hold as a constant value used for calculations.
-			this.makebutton(Float.toString(cell.getCoefficient()), gridbag, c, container);
-		}
-
-		return container;
 	}
 	
 	/**
@@ -114,19 +91,6 @@ public class Window {
 		Object[][] data = this.fillTable(propagatedInputs, propagatedOutputs, propagatedResult, propagatedX);
 		JTable table = new JTable(data, cells);
 		return table;
-	}
-	
-	/**
-	 * Method which creates a new button placed in the GridBadLayout based on the input parameters.
-	 * @param name: Name of the button.
-	 * @param gridbag: The layout working on.
-	 * @param c: Grid constraints for button placement.
-	 * @param container: The container which will hold the new button.
-	 */
-	protected void makebutton(String name, GridBagLayout gridbag, GridBagConstraints c, JPanel container) {
-		Button newButton = new Button(name);
-		gridbag.setConstraints(newButton, c);
-		container.add(newButton);
 	}
 	
 	private boolean solveForNewX(int x, boolean flush) {

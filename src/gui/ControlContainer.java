@@ -17,7 +17,7 @@ public class ControlContainer extends Container {
 	private JPanel controlContainer;
 	
 	public ControlContainer(JFrame frame) {
-		super(frame);
+		super(frame, "Control");
 		this.controlContainer = this.container;
 		
 		this.addPushX();
