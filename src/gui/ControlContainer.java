@@ -15,26 +15,16 @@ import javax.swing.JTextField;
 public class ControlContainer extends Container {
 	// TODO add functionality class to press x and flush
 	private JPanel controlContainer;
-	private GridBagLayout containerLayout;
 	
 	public ControlContainer(JFrame frame) {
 		super(frame);
-		this.controlContainer = super.createBasicContainer();
-		this.containerLayout = this.setLayout();
+		this.controlContainer = this.container;
 		
-		this.setLayout();
 		this.addPushX();
 		this.addFlush();
 		
 		frame.add(this.controlContainer);
 		frame.pack();
-	}
-	
-	private GridBagLayout setLayout() {
-		GridBagLayout gridbag = new GridBagLayout();
-		this.controlContainer.setLayout(gridbag);
-		
-		return gridbag;
 	}
 	
 	private void setLayoutConstraints(JComponent object) {
@@ -46,8 +36,8 @@ public class ControlContainer extends Container {
 			constraints.gridheight=2;
 			this.containerLayout.setConstraints(object, constraints);
 		} else {
-			constraints.weightx = 1.0;
-			constraints.weighty = 1.0;
+			constraints.gridy=1;
+			constraints.gridheight=2;
 			this.containerLayout.setConstraints(object, constraints);
 		}
 	}
