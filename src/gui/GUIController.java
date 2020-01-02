@@ -22,7 +22,7 @@ public class GUIController {
 		frame.setLayout(new GridLayout(4, 1));
 
 		CellContainer cellContainer = new CellContainer(frame, this.polynomialEvaluator.getCells());
-		ParseContainer parseContainer = new ParseContainer(frame);
+		ParseContainer parseContainer = new ParseContainer(frame, this.polynomialEvaluator.getCells().size());
 		ResultContainer resultContainer = new ResultContainer(frame);
 		ControlContainer controlContainer = new ControlContainer(frame, parseContainer, resultContainer, this.polynomialEvaluator);
 

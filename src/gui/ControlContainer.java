@@ -109,19 +109,24 @@ public class ControlContainer extends Container {
 	public boolean solveForNewX(int x, boolean flush) {
 		ArrayList<Float> propagatedInputs = this.pe.getPreviousTimeOutputs();
 		boolean b = this.pe.handlePushX(x, flush);
-		ArrayList<Float> propagatedOutputs = this.pe.getPreviousTimeOutputs();
-		float propagatedResult = this.pe.getPropagatedResult();
-		float propagatedX = this.pe.getPropagatedX();
-		
-		System.out.println("Result: " + propagatedResult + " for x: " + propagatedX);
-		System.out.println("Inputs: " + propagatedInputs);
-		System.out.println("Outputs: " + propagatedOutputs);
+		if (b) {
+			ArrayList<Float> propagatedOutputs = this.pe.getCurrentOutputs();
+			ArrayList<Float> propagatedXes = this.pe.getCurrentXes();
+			float propagatedResult = this.pe.getPropagatedResult();
+			float propagatedX = this.pe.getPropagatedX();
+			
+			System.out.println("Result: " + propagatedResult + " for x: " + propagatedX);
+			System.out.println("Inputs: " + propagatedInputs);
+			System.out.println("Outputs: " + propagatedOutputs);
 
-		this.parseContainer.addData(propagatedInputs, propagatedOutputs, propagatedResult, propagatedX);
-		if (!(Double.isNaN(propagatedResult))) {
-			System.out.println("PR: " + propagatedResult);
-			this.resultContainer.addResult(propagatedResult, propagatedX, this.pe.getCells());
+			// this.parseContainer.addData(propagatedInputs, propagatedOutputs, propagatedResult, propagatedX);
+			this.parseContainer.addDataRow(propagatedInputs, propagatedOutputs, propagatedXes);
+			if (!(Double.isNaN(propagatedResult))) {
+				System.out.println("PR: " + propagatedResult);
+				this.resultContainer.addResult(propagatedResult, propagatedX, this.pe.getCells());
+			}
 		}
+		
 		return b;
 	}
 }
