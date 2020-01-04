@@ -1,4 +1,4 @@
-package gui;
+package evaluation_gui;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
