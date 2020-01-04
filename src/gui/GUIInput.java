@@ -16,6 +16,7 @@ public class GUIInput extends GUIBase{
 	}
 	
 	private void setUpContainers() {
+		@SuppressWarnings("unused")
 		InputContainer inputContainer = new InputContainer(this.frame, "Coefficients.");
 	}
 	

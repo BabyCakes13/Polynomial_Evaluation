@@ -2,6 +2,7 @@ package input_gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import gui.Container;
+import gui.GUIController;
+import items.PolynomialEvaluator;
 
 public class InputContainer extends Container{
 	private JPanel inputContainer;
@@ -25,24 +28,58 @@ public class InputContainer extends Container{
 	}
 	
 	private void addCoefficients() {
-		JLabel label = new JLabel();
-		label.setText("Enter the coefficients to the polynomial equation.");
+		JLabel coefficientsLabel = new JLabel();
+		coefficientsLabel.setText("Enter the coefficients to the polynomial equation.");
 		JTextField inputField = new JTextField(20);
 		JButton addButton = new JButton("ADD COEFFICIENTS");
 		
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String inputValue = inputField.getText();
-				System.out.println(inputValue);
+				boolean success = addCoefficients(inputValue, coefficientsLabel);
+				
+				if(success) {
+					PolynomialEvaluator evaluator = new PolynomialEvaluator();
+					GUIController guiController = new gui.GUIController("Polynomial evaluation", evaluator);
+					guiController.displayGUI();
+				}
 			}
 		});
 		
-		this.setInputLayoutConstraints(label);
+		this.setInputLayoutConstraints(coefficientsLabel);
 		this.setInputLayoutConstraints(inputField);
 		this.setInputLayoutConstraints(addButton);
 		
-		this.inputContainer.add(label);
+		this.inputContainer.add(coefficientsLabel);
 		this.inputContainer.add(inputField);
 		this.inputContainer.add(addButton);
+	}
+	
+	private boolean addCoefficients(String input, JLabel label) {
+		String[] stringCoefficients = input.split(",");
+		ArrayList<Float> coefficients = new ArrayList<Float>();
+		
+		System.out.println(coefficients.toString());
+		for(String coefficient:stringCoefficients) {
+			if (checkNumber(coefficient)) {
+				coefficients.add(Float.parseFloat(coefficient));
+			} else {
+				label.setText("The coefficients must be numbers.");
+				return false;
+			}
+		}
+		
+		label.setText("Good job, human. We shall proceed to the next step...");
+		return true;
+	}
+	
+	private boolean checkNumber(String input) {
+		try {
+			Float.parseFloat(input);
+		} catch (NumberFormatException e) {
+			System.out.println("Please enter a number for x.");
+			return false;
+		}
+		return true;
 	}
 }
