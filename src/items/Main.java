@@ -1,7 +1,5 @@
 package items;
 
-import items.PolynomialEvaluator;
-
 import gui.GUIInput;
 
 public class Main {

@@ -3,6 +3,7 @@ package input_gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,18 +17,23 @@ import items.PolynomialEvaluator;
 
 public class InputContainer extends Container{
 	private JPanel inputContainer;
+	private ArrayList<Float> coefficients;
 	
-	public InputContainer(JFrame frame, String containerTitle) {
-		super(frame, "Equation input.");
+	public InputContainer(EquationDisplayContainer equationContainer, JFrame frame, String containerTitle) {
+		super(frame, containerTitle);
 		this.inputContainer = this.container;
 		
-		this.addCoefficients();
+		this.addCoefficients(equationContainer);
 		
 		frame.add(this.inputContainer);
 		frame.pack();
 	}
 	
-	private void addCoefficients() {
+	public ArrayList<Float> getCoefficients() {
+		return this.coefficients;
+	}
+	
+	private void addCoefficients(EquationDisplayContainer equationContainer) {
 		JLabel coefficientsLabel = new JLabel();
 		coefficientsLabel.setText("Enter the coefficients to the polynomial equation.");
 		JTextField inputField = new JTextField(20);
@@ -36,10 +42,12 @@ public class InputContainer extends Container{
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String inputValue = inputField.getText();
-				ArrayList<Float>  success = addCoefficients(inputValue, coefficientsLabel);
+				coefficients = addCoefficients(inputValue, coefficientsLabel);
 
-				if(success != null) {
-					PolynomialEvaluator evaluator = new PolynomialEvaluator(success);
+				if(coefficients != null) {
+					equationContainer.displayEquation(coefficients);
+					Collections.reverse(coefficients);
+					PolynomialEvaluator evaluator = new PolynomialEvaluator(coefficients);
 					GUIController guiController = new gui.GUIController("Polynomial evaluation", evaluator);
 					guiController.displayGUI();
 				}

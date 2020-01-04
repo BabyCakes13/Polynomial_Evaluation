@@ -1,7 +1,6 @@
 package items;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PolynomialEvaluator {
 	private ArrayList<Float> coefficients;
@@ -43,7 +42,6 @@ public class PolynomialEvaluator {
 	
 	private void setItemsUp() {
 		for(float coefficient : this.coefficients) {
-			// create the cells, previous time outputs and previous time x'es
 			Cell cell = new Cell(coefficient);
 			this.previousTimeOutputs.add(FLUSH_VALUE);
 			this.previousTimeXes.add(FLUSH_VALUE);
@@ -62,7 +60,7 @@ public class PolynomialEvaluator {
 		if (this.time > this.totalTimeToRun) {
 			return false;
 		} else {			
-			this.parseCells(x);
+			this.traverseCells(x);
 			
 			this.previousTimeOutputs = currentOutputs;
 			this.previousTimeXes = currentXes;
@@ -83,7 +81,7 @@ public class PolynomialEvaluator {
 		return this.x;
 	}
 	
-	public void parseCells(float newX) {
+	public void traverseCells(float newX) {
 		currentOutputs = new ArrayList<Float>();
 		currentXes = new ArrayList<Float>();
 		

@@ -42,14 +42,14 @@ public class ResultContainer extends Container{
 	}
 	
 	public void addResult(float result, float x, ArrayList<Cell> cells) {
-		String bigEquation = this.createEquation(result, x, cells).toString();
+		String bigEquation = this.createEquation(result, x, cells);
 		this.parseScreen.append(bigEquation);
 		this.parseScreen.append("\n");
 		this.resultContainer.revalidate();
 		this.resultContainer.repaint();
 	}
 	
-	public StringBuilder createEquation(float result, float x, ArrayList<Cell> cells) {
+	public String createEquation(float result, float x, ArrayList<Cell> cells) {
 		StringBuilder bigEquation = new StringBuilder("0*x + "  + cells.get(0).getCoefficient() + ")");
 		for(int i = 1; i < cells.size(); i++) {
 			bigEquation.insert(0, "(");
@@ -58,6 +58,6 @@ public class ResultContainer extends Container{
 		}
 		bigEquation.append(" = " + result + " (x = " + x + ")");
 		
-		return bigEquation;
+		return bigEquation.toString();
 	}
 }
