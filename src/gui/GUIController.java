@@ -24,9 +24,11 @@ public class GUIController extends GUIBase{
 	}
 	
 	private void setUpContainers() {
+		@SuppressWarnings("unused")
 		CellContainer cellContainer = new CellContainer(this.frame, this.polynomialEvaluator.getCells());
 		ParseContainer parseContainer = new ParseContainer(this.frame, this.polynomialEvaluator.getCells().size());
 		ResultContainer resultContainer = new ResultContainer(this.frame);
+		@SuppressWarnings("unused")
 		ControlContainer controlContainer = new ControlContainer(this.frame, parseContainer, resultContainer, this.polynomialEvaluator);
 	}
 	

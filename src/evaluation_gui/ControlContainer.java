@@ -1,12 +1,10 @@
 package evaluation_gui;
 
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,21 +34,6 @@ public class ControlContainer extends Container {
 		frame.pack();
 	}
 	
-	private void setLayoutConstraints(JComponent object) {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		
-		if (object instanceof JTextField) {
-			constraints.gridy=1;
-			constraints.gridheight=2;
-			this.containerLayout.setConstraints(object, constraints);
-		} else {
-			constraints.gridy=1;
-			constraints.gridheight=2;
-			this.containerLayout.setConstraints(object, constraints);
-		}
-	}
-	
 	private void addPushX() {
 		JButton pushXButton = new JButton("PUSH X");
 		JLabel pushXLabel = new JLabel();
@@ -65,9 +48,9 @@ public class ControlContainer extends Container {
 			   }
 			});
 		
-		this.setLayoutConstraints(pushXLabel);
-		this.setLayoutConstraints(pushXButton);
-		this.setLayoutConstraints(pushXTextField);
+		this.setInputLayoutConstraints(pushXLabel);
+		this.setInputLayoutConstraints(pushXButton);
+		this.setInputLayoutConstraints(pushXTextField);
 		
 		this.controlContainer.add(pushXLabel);
 		this.controlContainer.add(pushXTextField);
@@ -83,7 +66,7 @@ public class ControlContainer extends Container {
 			   }
 			});
 		
-		this.setLayoutConstraints(flushButton);
+		this.setInputLayoutConstraints(flushButton);
 		this.controlContainer.add(flushButton);
 	}
 	
