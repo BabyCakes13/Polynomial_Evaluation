@@ -36,10 +36,10 @@ public class InputContainer extends Container{
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String inputValue = inputField.getText();
-				boolean success = addCoefficients(inputValue, coefficientsLabel);
-				
-				if(success) {
-					PolynomialEvaluator evaluator = new PolynomialEvaluator();
+				ArrayList<Float>  success = addCoefficients(inputValue, coefficientsLabel);
+
+				if(success != null) {
+					PolynomialEvaluator evaluator = new PolynomialEvaluator(success);
 					GUIController guiController = new gui.GUIController("Polynomial evaluation", evaluator);
 					guiController.displayGUI();
 				}
@@ -55,22 +55,21 @@ public class InputContainer extends Container{
 		this.inputContainer.add(addButton);
 	}
 	
-	private boolean addCoefficients(String input, JLabel label) {
+	private ArrayList<Float> addCoefficients(String input, JLabel label) {
 		String[] stringCoefficients = input.split(",");
 		ArrayList<Float> coefficients = new ArrayList<Float>();
 		
-		System.out.println(coefficients.toString());
 		for(String coefficient:stringCoefficients) {
 			if (checkNumber(coefficient)) {
 				coefficients.add(Float.parseFloat(coefficient));
 			} else {
 				label.setText("The coefficients must be numbers.");
-				return false;
+				return null;
 			}
 		}
 		
 		label.setText("Good job, human. We shall proceed to the next step...");
-		return true;
+		return coefficients;
 	}
 	
 	private boolean checkNumber(String input) {
