@@ -1,11 +1,9 @@
 package input_gui;
 
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +18,8 @@ public class InputContainer extends Container{
 		super(frame, "Equation input.");
 		this.inputContainer = this.container;
 		
+		this.addCoefficients();
+		
 		frame.add(this.inputContainer);
 		frame.pack();
 	}
@@ -33,20 +33,16 @@ public class InputContainer extends Container{
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String inputValue = inputField.getText();
-				// TODO Implement coefficients interpretation method.
+				System.out.println(inputValue);
 			}
 		});
 		
-	}
-	
-	private GridBagConstraints setLayoutConstraints(JComponent object) {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 1.0;
-		constraints.weighty = 1.0;
-		this.containerLayout.setConstraints(object, constraints);
+		this.setInputLayoutConstraints(label);
+		this.setInputLayoutConstraints(inputField);
+		this.setInputLayoutConstraints(addButton);
 		
-		return constraints;
-		
+		this.inputContainer.add(label);
+		this.inputContainer.add(inputField);
+		this.inputContainer.add(addButton);
 	}
 }

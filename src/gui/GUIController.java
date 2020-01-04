@@ -20,7 +20,7 @@ public class GUIController extends GUIBase{
 	
 	public void displayGUI() {
 		this.setUpContainers();
-		this.displayFrame();
+		this.displayFrame(1000, 1000);
 	}
 	
 	private void setUpContainers() {

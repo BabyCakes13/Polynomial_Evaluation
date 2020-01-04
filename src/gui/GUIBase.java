@@ -10,8 +10,8 @@ public class GUIBase {
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	protected void displayFrame() {
-		frame.setSize(1000, 1000);
+	protected void displayFrame(int x, int y) {
+		frame.setSize(x, y);
 		frame.setVisible(true);
 	}
 }
