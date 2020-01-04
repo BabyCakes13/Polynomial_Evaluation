@@ -1,11 +1,13 @@
-package evaluation_gui;
+package gui;
 
-import items.GUIBase;
 import items.PolynomialEvaluator;
 
 import java.awt.GridLayout;
 
+import evaluation_gui.CellContainer;
 import evaluation_gui.ControlContainer;
+import evaluation_gui.ParseContainer;
+import evaluation_gui.ResultContainer;
 
 public class GUIController extends GUIBase{
 	private PolynomialEvaluator polynomialEvaluator;

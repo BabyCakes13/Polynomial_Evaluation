@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import gui.Container;
 import items.Cell;
 
 public class ResultContainer extends Container{

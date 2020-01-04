@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import gui.Container;
 import items.PolynomialEvaluator;
 
 public class ControlContainer extends Container {

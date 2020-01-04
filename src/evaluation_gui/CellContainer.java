@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import gui.Container;
 import items.Cell;
 
 public class CellContainer extends Container{

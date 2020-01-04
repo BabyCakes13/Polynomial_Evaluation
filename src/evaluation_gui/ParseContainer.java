@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import gui.Container;
+
 public class ParseContainer extends Container{
 	private JPanel parseContainer;
 	private DefaultTableModel tableModel;
